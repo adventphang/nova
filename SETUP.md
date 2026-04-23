@@ -24,14 +24,15 @@ If anything is missing, install it before continuing.
 This is a lightweight Flask + SQLite server that stores cron jobs status and for future capability expansion.
 
 ```bash
-mkdir -p ./backend
+mkdir -p ./backend/logs
 cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install flask sqlite-utils
+cd ..
 ```
 
-Have Claude Code generate `./backend/api_server.py` as the core server in Python (Flask + SQLite) with these endpoints:
+Write `./backend/api_server.py` as the core server in Python (Flask + SQLite) with these endpoints:
 
 **Crons snapshot:**
 
@@ -40,6 +41,8 @@ Have Claude Code generate `./backend/api_server.py` as the core server in Python
 | POST   | /cron/active  | Replace the snapshot of currently scheduled crons `{crons:[{job_id, label, cron_expr, prompt_preview}]}` |
 | GET    | /cron/active  | Runtime cron list                                                                                        |
 | GET    | /cron/prompts | Parse `./cron-prompts.md` into sections                                                                  |
+
+`GET /cron/prompts` parser contract: split `./cron-prompts.md` on `## ` headings. For each section, extract the cron expression from the first body line, which is formatted as `` `cron: <expr>` ``. Return `[{name, cron_expr, prompt}]`.
 
 The server should:
 
@@ -51,7 +54,7 @@ The server should:
 
 ### Web Visualisation
 
-Also create an `index.html` in the same directory — a single-page web app served at `/ui` with one tab:
+Also create an `index.html` in the same directory — a single-page web app served at `/ui` with two tabs:
 
 1. **Logs** — Chronological view of all conversation logs with collapsible date groups and search.
 2. **Crons** — two-column diff: runtime-active with live countdowns to next fire (updated every second via JS cron-next), and persisted prompts from `./cron-prompts.md` with sync badges (`synchronised` / `⚠ not created`).
@@ -80,7 +83,7 @@ curl -s http://127.0.0.1:7777/health
 
 This is the brain of the system. Write this to `./CLAUDE.md`.
 
-But before writing the file, ask the user two questions back-to-back:
+But before writing the file, ask the user these questions back-to-back:
 
 > "What name should I respond to? (e.g. Nova)"
 
@@ -128,15 +131,40 @@ At the start of each session, perform these steps automatically:
 
 ## STEP 4: Create the cron jobs
 
-| # | Name | Schedule | What it does |
-|---|------|----------|-------------|
-| 1 | Cron watchdog | Every 6h (:23) | Verify no crons are about to expire (7-day TTL), alert if any are |
-| 2 | Heartbeat | Every 1h (:43) | System state check, verify all 4 crons active, recreate missing. Social message 1x/day (50/50) if no alerts. Silent between 00:00-08:00 |
-| 3 | Memory API health | Every 3h (:33) | Check API health, auto-restart if down, notify user of failures |
-| 4 | Daily briefing | Daily ~9:00 AM | Weather, currencies, news, movies. |
+| # | Name | Cron expression (UTC) | What it does |
+| --- | ------ | --------------------- | ----------- |
+| 1 | Cron watchdog | `23 */6 * * *` | Verify no crons are about to expire (7-day TTL), recreate any that are, alert the user |
+| 2 | Heartbeat | `43 * * * *` | System state check, verify all 4 crons active, recreate missing. Social message 1×/day (50/50) if no alerts. Silent between 00:00–08:00 in user timezone |
+| 3 | Backend API health | `33 */3 * * *` | Check API health, auto-restart if down, notify user of failures |
+| 4 | Daily briefing | compute from user TZ¹ | Weather, currencies, news, movies |
 
-The scheduled time in the table above is expressed in the user timezone. Adjust to the server time accordingly (likely UTC).
-Persist these 4 prompts to `./cron-prompts.md` so they survive session restarts. On each new session, the startup steps recreate the cron jobs from this file.
+¹ Target 09:00 in the user's IANA timezone captured in Step 3. Convert to UTC (e.g. UTC+8 → `0 1 * * *`).
+
+Write these 4 prompts to `./cron-prompts.md` using the format below. On each new session, the startup steps recreate the cron jobs by reading this file.
+
+### `cron-prompts.md` format
+
+~~~markdown
+# <NAME> — Cron Prompts
+
+**Schedule convention.** The Claude runtime fires cron expressions in the server's local timezone, which is **UTC**. The user is in **<USER_IANA_TIMEZONE>**. Every time-anchored schedule below is written in UTC with the **local intent noted in parentheses**. When editing or recreating a cron, keep the UTC expression as the machine-readable value and the local time as the human-readable one.
+
+Standard header (all prompts):
+
+```bash
+cd ~/nova
+```
+
+## <Cron name>
+`cron: <UTC cron expression>` (<equivalent local time>)
+
+<Full prompt body: what to run, when to notify the user, what to do on failure.>
+
+## <Next cron name>
+`cron: <UTC cron expression>` (<equivalent local time>)
+
+<Prompt body.>
+~~~
 
 ---
 
