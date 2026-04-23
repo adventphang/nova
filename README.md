@@ -131,7 +131,7 @@ curl -s http://127.0.0.1:7777/health
 # Expected: {"status":"ok"}
 
 # System prompt written?
-head -5 ~/.claude/CLAUDE.md
+head -5 ./CLAUDE.md
 
 # Cron jobs persisted?
 head -5 ~/nova/cron-prompts.md

@@ -1,4 +1,4 @@
-# AI Assitant - Autonomous Setup Guide
+# AI Assistant - Autonomous Setup Guide
 
 You are Claude Code. The user wants you to set up a 24/7 personal AI assistant system inside the current project directory. Each path in this guide is relative to the project root. Follow every step below in order. Do NOT skip steps.
 
@@ -45,7 +45,7 @@ The server should:
 
 - Listen on `0.0.0.0:7777`
 - Use SQLite via `sqlite-utils`
-- Store the database at `~/backend/state.db`
+- Store the database at `./backend/state.db`
 - Enable CORS for all origins
 - Serve a web visualisation at `/ui`
 
@@ -78,7 +78,7 @@ curl -s http://127.0.0.1:7777/health
 
 ## STEP 3: Create CLAUDE.md
 
-This is the brain of the system. Write this to `~/.claude/CLAUDE.md`.
+This is the brain of the system. Write this to `./CLAUDE.md`.
 
 But before writing the file, ask the user two questions back-to-back:
 
@@ -119,7 +119,7 @@ British English in prose and UI text; American English in code identifiers.
 At the start of each session, perform these steps automatically:
 
 1. **Check backend API health**: `curl -s http://127.0.0.1:7777/health` — if the API is down, start it automatically using `NOVA_DB_PATH=./backend/state.db nohup python3 ./backend/api_server.py > ./backend/logs/api_server.log 2>&1 &` and wait 2 seconds before verifying again.
-2. **Create all cron jobs** (see `./cron-prompt.md`). The heartbeat and briefing crons verify that all jobs are active and recreate any that are missing.
+2. **Create all cron jobs** (see `./cron-prompts.md`). The heartbeat and briefing crons verify that all jobs are active and recreate any that are missing.
 3. **Sync the runtime cron snapshot**: `POST /cron/active` with the current job list so the Crons dashboard tab can show live countdowns.
 
 ~~~
@@ -151,8 +151,8 @@ curl -s http://127.0.0.1:7777/health
 # CLAUDE.md exists?
 head -5 ./CLAUDE.md
 
-# cron-prompt.md exists?
-head -5 ./cron-prompt.md
+# cron-prompts.md exists?
+head -5 ./cron-prompts.md
 ```
 
 Tell the user:
