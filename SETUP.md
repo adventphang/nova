@@ -44,6 +44,25 @@ Write `./backend/api_server.py` as the core server in Python (Flask + SQLite) wi
 
 `GET /cron/prompts` parser contract: split `./cron-prompts.md` on `## ` headings. For each section, extract the cron expression from the first body line, which is formatted as `` `cron: <expr>` ``. Return `[{name, cron_expr, prompt}]`.
 
+**Conversation logs:**
+
+| Method | Endpoint              | Purpose                                                          |
+| ------ | --------------------- | ---------------------------------------------------------------- |
+| GET    | /logs                 | List session files with metadata (does not read file contents)   |
+| GET    | /logs/`<session_id>`  | Return parsed entries from a single session `.jsonl` file        |
+
+Claude Code stores conversation logs as `.jsonl` files under `~/.claude/projects/<project-key>/`, where `<project-key>` is the absolute path of the project root with every `/` replaced by `-`. Derive this path at server startup from the server's own working directory:
+
+```python
+import os
+project_key = os.getcwd().replace("/", "-")
+LOGS_DIR = os.path.expanduser(f"~/.claude/projects/{project_key}")
+```
+
+`GET /logs` reads only filesystem metadata (no file contents). Return `{sessions: [{session_id, filename, last_modified}]}` sorted by `last_modified` descending. `session_id` is the filename without the `.jsonl` extension. Return an empty list if `LOGS_DIR` does not exist.
+
+`GET /logs/<session_id>` reads the single file `LOGS_DIR/<session_id>.jsonl`, parses each line as JSON, and returns `{session_id, entries: [{timestamp, type, role, content, ...}]}` sorted by `timestamp` ascending. Skip lines that fail to parse. Return 404 if the file does not exist.
+
 The server should:
 
 - Listen on `0.0.0.0:7777`
@@ -56,7 +75,7 @@ The server should:
 
 Also create an `index.html` in the same directory — a single-page web app served at `/ui` with two tabs:
 
-1. **Logs** — Chronological view of all conversation logs with collapsible date groups and search.
+1. **Logs** — Session-grouped view of conversation logs. On load, fetch `GET /logs` to list sessions; clicking a session fetches `GET /logs/<session_id>` to load its entries on demand. Sessions are listed newest-first with their last-modified time. Include a search bar that filters across loaded session entries.
 2. **Crons** — two-column diff: runtime-active with live countdowns to next fire (updated every second via JS cron-next), and persisted prompts from `./cron-prompts.md` with sync badges (`synchronised` / `⚠ not created`).
 
 A CSS variable `--topbar-h` is kept in sync with the actual topbar height so panels never overlap when the topbar wraps on mobile.
