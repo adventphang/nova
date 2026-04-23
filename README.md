@@ -58,14 +58,11 @@ claude --version
 
 These settings are required for Nova. Apply them once — they persist globally.
 
-**Install plugins** (run inside an active `claude` session as slash commands):
+**Configure the status line** to show current folder, model, and colour-coded context usage. Start a `claude` session, then run `/status-line` and paste this prompt when asked what to display:
 
 ```text
-/plugins install context7@claude-plugins-official
-/plugins install telegram@claude-plugins-official
+Show the current folder name, the active model, and context usage as a colour-coded progress bar with a percentage value.
 ```
-
-When the Telegram plugin prompts for a bot token, paste the token from Phase 2.
 
 **Disable auto-memory** (Claude Code would otherwise generate memory files you don't want):
 
@@ -80,7 +77,14 @@ echo 'export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-**Configure the status line** to show current folder, model, and colour-coded context usage. Run `/status-line` inside a `claude` session and follow the prompts.
+**Install plugins** (run inside an active `claude` session as slash commands):
+
+```text
+/plugins install context7@claude-plugins-official
+/plugins install telegram@claude-plugins-official
+```
+
+When the Telegram plugin prompts for a bot token, paste the token from Phase 2.
 
 ---
 
