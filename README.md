@@ -1,30 +1,17 @@
-Nova - AI assistant on Claude Code
+# Nova — AI Assistant on Claude Code
 
-## Prerequisite
+Nova is a 24/7 personal AI assistant that runs on your server and communicates with you over Telegram. It monitors itself, runs scheduled tasks (daily briefing, health checks, cron watchdog), and exposes a web dashboard at `http://localhost:7777/ui`.
 
-1. Install Claude Code and pre-requisites
-    - git, python3, venv, sqlite3
+By the end of this guide you will have Nova running in a persistent tmux session on an Ubuntu 24.04 VPS, sending you a welcome message on Telegram.
 
-2. Configure claude code
+---
 
+## Phase 1 — Prerequisites
 
-    install plugins
-        - context7@claude-plugins-official
-        - telegram@claude-plugins-official
+## Phase 2 — Telegram Bot
 
-    configure claude code
-        - "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
-        - autoMemoryEnabled: false
+## Phase 3 — Claude Code
 
-    - configure claude code status line to show the current folder name, current model, and colour-coded current context usage in progress bar and percentage value
+## Phase 4 — Install Nova
 
-3. Install and configure telegram plugin
-
-## Installing Nova
-
-1. Create a folder for the assistant. For example `mkdir ~/nova`.
-2. Go to the assistant folder `cd ~/nova`
-3. Start Claude code with `claude`
-4. Type `Read the file SETUP.md and follow every step in it to set up a 24/7 AI assistant. Ask me for confirmation before each major step.`
-5. Once everything is set up, start the assistant by running `claude --channels plugin:telegram@claude-plugins-official --dangerously-skip-permissions`
-
+## Phase 5 — Run
