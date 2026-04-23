@@ -71,6 +71,7 @@ Show the current folder name, the active model, and context usage as a colour-co
 ```text
 /plugins install context7@claude-plugins-official
 /plugins install telegram@claude-plugins-official
+/plugins install skill-creator@claude-plugins-official
 ```
 
 When the Telegram plugin prompts for a bot token, paste the token from Phase 2.
@@ -205,3 +206,19 @@ Integrate with my Microsoft 365 work account using Graph API. The tenant ID is `
 ```text
 Update my daily briefing. I want to know all my commitments for the day — pull them from my Microsoft work calendar. Also include USDMYR, SGDMYR, MYRIDR, BTCUSD, and S&P 500 index in your briefing. I also want bizarre or funny news stories (nothing serious, please). Deliver my briefing at 8:17 AM sharp each day.
 ```
+
+### Example 3: Knowledge base
+
+To set up a knowledge base inspired by [Karpathy's LLM wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f), read `vault-setup-prompt.md` first and edit it to suit your setup — in particular, the vault location defaults to `~/obsidian-vault/`. Change it if you want the vault elsewhere. Once you are happy, copy the contents into your Nova session.
+
+By default, filing a note or document does not trigger ingestion automatically — tell Nova explicitly, e.g. `ingest it` or `file this to my vault and ingest it`.
+
+To access the vault from your phone and other devices, sync it with Obsidian:
+
+1. Choose a cloud storage provider — iCloud for iPhone, Google Drive for Android.
+2. Install Obsidian on your mobile device and create the vault inside that cloud storage folder.
+3. Install Syncthing on both your VPS and your mobile device and sync the vault directory on your VPS to the vault folder on your mobile device.
+4. In Obsidian on your mobile device, mark the vault as **Always downloaded**.
+5. Repeat for any other devices that access the vault via iCloud or Google Drive.
+
+Syncthing on iOS cannot run as a background daemon — sync only happens while the app is open.
