@@ -60,7 +60,7 @@ These settings are required for Nova. Apply them once — they persist globally.
 
 **Install plugins** (run inside an active `claude` session as slash commands):
 
-```
+```text
 /plugins install context7@claude-plugins-official
 /plugins install telegram@claude-plugins-official
 ```
@@ -101,7 +101,7 @@ claude
 
 Once the session is open, paste this prompt exactly:
 
-```
+```text
 Read the file SETUP.md and follow every step in it to set up a 24/7 AI assistant. Ask me for confirmation before each major step.
 ```
 
@@ -151,8 +151,8 @@ Nova will perform its startup checks, recreate its cron jobs, and send you a wel
 
 **tmux essentials:**
 
-| Action | Key / Command |
-|--------|--------------|
+| Action             | Key / Command         |
+|--------------------|-----------------------|
 | Detach (leave running) | `Ctrl+B` then `D` |
-| Reattach later | `tmux attach -t nova` |
-| List sessions | `tmux ls` |
+| Reattach later     | `tmux attach -t nova` |
+| List sessions      | `tmux ls`             |
