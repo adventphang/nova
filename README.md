@@ -151,8 +151,8 @@ Nova will perform its startup checks, recreate its cron jobs, and send you a wel
 
 **tmux essentials:**
 
-| Action             | Key / Command         |
-|--------------------|-----------------------|
-| Detach (leave running) | `Ctrl+B` then `D` |
-| Reattach later     | `tmux attach -t nova` |
-| List sessions      | `tmux ls`             |
+| Action                 | Key / Command         |
+|------------------------|-----------------------|
+| Detach (leave running) | `Ctrl+B` then `D`     |
+| Reattach later         | `tmux attach -t nova` |
+| List sessions          | `tmux ls`             |
