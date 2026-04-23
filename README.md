@@ -164,3 +164,44 @@ Nova will perform its startup checks, recreate its cron jobs, and send you a wel
 | Detach (leave running) | `Ctrl+B` then `D`     |
 | Reattach later         | `tmux attach -t nova` |
 | List sessions          | `tmux ls`             |
+
+---
+
+## Phase 6 — Maintenance
+
+Clear Nova's context window regularly to keep responses sharp and avoid hitting limits. The recommended triggers are:
+
+- **Nightly** — clear before going to bed each night.
+- **At 40% usage** — clear whenever the status line shows the context bar approaching 40%.
+
+To clear, reattach to the tmux session and run one of these inside the Claude Code session:
+
+| Command    | Effect                                         |
+|------------|------------------------------------------------|
+| `/clear`   | Wipes the context window entirely              |
+| `/compact` | Summarises history into a compressed context   |
+
+---
+
+## Phase 7 — Expanding capabilities
+
+The default setup comes with four cron jobs:
+
+1. **Cron watchdog** — Claude session cron jobs expire after 7 days. This job automatically renews any that are about to lapse.
+2. **Backend API health** — Periodically checks whether the backend service is running and restarts it if it is down.
+3. **Heartbeat** — Verifies that all scheduled jobs are active, recreates any that are missing, and sends you an occasional status update.
+4. **Daily briefing** — Sends you a morning message covering the weather, exchange rates, news, and upcoming films — delivered at 9 AM.
+
+From here on, the world is your oyster. Just tell your bot on Telegram what capability you would like to add.
+
+### Example 1: Integrate with a Microsoft work account
+
+```text
+Integrate with my Microsoft 365 work account using Graph API. The tenant ID is `xxx` and the client ID is `xxx`. We will use device flow login. You must save the refresh token to exchange for a fresh access token when it expires. You will use this to read my calendars and emails.
+```
+
+### Example 2: Customise the daily briefing
+
+```text
+Update my daily briefing. I want to know all my commitments for the day — pull them from my Microsoft work calendar. Also include USDMYR, SGDMYR, MYRIDR, BTCUSD, and S&P 500 index in your briefing. I also want bizarre or funny news stories (nothing serious, please). Deliver my briefing at 8:17 AM sharp each day.
+```
