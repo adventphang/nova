@@ -56,7 +56,7 @@ Create four project-scoped skills to work with the vault. Use the /skill-creator
 
 ## Vault linting cron job
 
-- Add a new cron job to call `vault-lint` skill every Sunday morning 5:12AM. Remember to register it with `cron-prompts.md` so it's persisted across session restart.
+Add a new cron job to call `vault-lint` skill every Sunday morning 5:12AM. Register it in `cron-prompts.md` so it survives session restarts.
 
 ## Update your CLAUDE.md
 

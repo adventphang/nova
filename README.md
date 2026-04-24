@@ -1,6 +1,6 @@
 # Nova — AI Assistant on Claude Code
 
-Nova is a 24/7 personal AI assistant that runs on your server and communicates with you over Telegram. It monitors itself, runs scheduled tasks (daily briefing, health checks, cron watchdog), and exposes a web dashboard at `http://localhost:7777/ui`.
+Nova is a 24/7 personal AI assistant that runs on your server and communicates with you over Telegram. It monitors itself, runs scheduled tasks (daily briefing, health checks, cron watchdog), and exposes a web dashboard at `http://localhost:4321/ui`.
 
 By the end of this guide you will have Nova running in a persistent tmux session on an Ubuntu 24.04 VPS, sending you a welcome message on Telegram.
 
@@ -128,7 +128,7 @@ Once setup completes, run these checks:
 
 ```bash
 # Backend API running?
-curl -s http://127.0.0.1:7777/health
+curl -s http://127.0.0.1:4321/health
 # Expected: {"status":"ok"}
 
 # System prompt written?
@@ -201,13 +201,19 @@ From here on, the world is your oyster. Just tell your bot on Telegram what capa
 Integrate with my Microsoft 365 work account using Graph API. The tenant ID is `xxx` and the client ID is `xxx`. We will use device flow login. You must save the refresh token to exchange for a fresh access token when it expires. You will use this to read my calendars and emails.
 ```
 
-### Example 2: Customise the daily briefing
+### Example 2: Creating an email check cron job
+
+```text
+Add a new cron job to check my email every hour. Register it in `cron-prompts.md` so it survives session restarts.
+```
+
+### Example 3: Customise the daily briefing
 
 ```text
 Update my daily briefing. I want to know all my commitments for the day — pull them from my Microsoft work calendar. Also include USDMYR, SGDMYR, MYRIDR, BTCUSD, and S&P 500 index in your briefing. I also want bizarre or funny news stories (nothing serious, please). Deliver my briefing at 8:17 AM sharp each day.
 ```
 
-### Example 3: Knowledge base
+### Example 4: Knowledge base
 
 To set up a knowledge base inspired by [Karpathy's LLM wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f), read `vault-setup-prompt.md` first and edit it to suit your setup — in particular, the vault location defaults to `~/obsidian-vault/`. Change it if you want the vault elsewhere. Once you are happy, copy the contents into your Nova session.
 
