@@ -95,11 +95,11 @@ source ~/.bashrc
 
 ## Phase 4 — Install Nova
 
-Create a directory for the assistant and clone this repository into it:
+Clone this repository into a new directory, then remove the git metadata — Nova is a personal setup, not a project you'll be committing back to:
 
 ```bash
-mkdir ~/nova && cd ~/nova
-git clone <this-repo-url> .
+git clone --depth 1 https://github.com/adventphang/nova ~/nova
+cd ~/nova && rm -rf .git
 ```
 
 Start Claude Code:
